@@ -7,6 +7,7 @@ import { ToastProvider } from '@/components/providers/ToastProvider';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SyncConflictModal } from '@/components/SyncConflictModal';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { PWAServiceWorker } from '@/components/PWAServiceWorker';
 
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
@@ -89,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <ThemeProvider>
                 {children}
                 <SyncConflictModal />
+                <PWAServiceWorker />
               </ThemeProvider>
             </ToastProvider>
           </I18nProvider>

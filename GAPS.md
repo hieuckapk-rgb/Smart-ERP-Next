@@ -1,6 +1,6 @@
 # Smart ERP Next — Gaps & Roadmap (Updated 2026-06-28)
 
-Completed: 52 | Remaining: 6
+Completed: 53 | Remaining: 5
 
 ## Completed
 
@@ -57,6 +57,7 @@ Completed: 52 | Remaining: 6
 | E2E POS checkout | Medium | Full POS flow E2E test |
 | E2E feature smoke | Low | Status, currency, export, activity E2E tests |
 | Customer portal API test | Medium | 9 tests for controller delegation |
+| PWA service worker | Medium | Production-only service worker registration + app shell caching |
 
 ## Known Tech Debt
 
@@ -71,7 +72,6 @@ Completed: 52 | Remaining: 6
 | Gap | Priority | Notes |
 |-----|----------|-------|
 | Deploy staging server (VPS) | **High** | Needs VPS + GitHub secrets (STAGING_HOST, SSH_KEY) |
-| Mobile PWA / manifest | Medium | manifest.json + service worker for offline |
 | Monitoring (ELK/Grafana) | Medium | Status API exists, full stack missing |
 | Multi-language i18n | Medium | Only vi/en basics, 50% pages translated |
 | Domain refactoring | Medium | 48→6 domain modules |
@@ -79,6 +79,16 @@ Completed: 52 | Remaining: 6
 
 ## Team Role Assessment Addendum (2026-06-29)
 
+A role-based review has been added in `docs/team-role-gap-assessment.md` to translate the roadmap into a real dev-team operating model. The first remediation pack now fixes the documentation/process foundation for product traceability, API governance, observability, security, QA evidence, incident handling, and release rollback.
+
+| Role area | Foundation now added | Remaining implementation | Priority | Tracking |
+|-----------|----------------------|--------------------------|----------|----------|
+| Product + QA | PRD template + test traceability matrix | Apply to each ERP module and link real test IDs | High | GAP-ROLE-01/07 |
+| Architecture + Backend | ADR process, API versioning policy, API error catalog | Add contract tests and enforce error codes in API code | High | GAP-ROLE-02/03 |
+| SRE + DevOps | Observability plan, SLO starter set, incident runbook, rollback playbook | Deploy metrics/traces/dashboards/alerts and staging gates | High | GAP-ROLE-04/08/10 |
+| Security | Security baseline and threat-model checklist | Add secret/dependency/container scanning and SBOM to CI | High | GAP-ROLE-05 |
+| Frontend/PWA | Manifest + production service worker registration added | Harden offline UX states and conflict tests | Medium | GAP-ROLE-06 |
+| Data/AI | Security/privacy and PRD metrics hooks | Add data contracts, PII inventory, forecast accuracy monitoring | Medium | GAP-ROLE-09 |
 A role-based review has been added in `docs/team-role-gap-assessment.md` to translate the roadmap into a real dev-team operating model. The highest-priority gaps are product/test traceability, API governance, observability, security program automation, PWA/offline hardening, release rollback playbooks, and data governance for forecast/analytics.
 
 | Role area | New gap | Priority | Tracking |

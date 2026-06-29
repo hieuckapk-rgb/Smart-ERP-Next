@@ -25,6 +25,7 @@ Smart ERP Next đã có nền tảng mạnh cho một ERP SME: monorepo rõ ràn
 | Solution Architect | Kiến trúc apps/packages rõ: API, web, database, shared, sync, accounting. | Domain modules còn phẳng; cần ADRs cho API versioning, multi-tenant isolation, eventing/webhook reliability, offline conflict strategy và boundaries giữa packages. | High |
 | Backend Engineer | NestJS API lớn, nhiều services/controllers/tests. | Chuẩn hóa API versioning, contract tests, idempotency cho order/payment/inventory, migration rollback, pagination/filtering spec và error catalog công khai. | High |
 | Frontend Engineer | Next.js web app, shared UI, hooks, localization. | Cần design system governance, accessibility gate, route-level loading/error UX, PWA manifest/service worker, visual regression tests và offline UX checklist. | High |
+| Mobile/PWA Engineer | Repo có nền sync/offline, manifest và service worker production-only cho app shell cache. | Cần install prompt, offline UX states, background sync UX, conflict tests và device matrix. | Medium |
 | Mobile/PWA Engineer | Repo có nền sync/offline và web app PWA-ready. | Thiếu manifest/service worker production, install prompt, offline cache strategy, background sync UX và device matrix. | Medium |
 | QA Engineer / SDET | Có Jest, Playwright, E2E, audit scripts và quality gate. | Cần test plan theo risk, flaky test policy, coverage dashboard thật trong CI, contract/API schema tests, synthetic smoke theo môi trường và traceability matrix. | High |
 | DevOps / Platform Engineer | Có Docker, compose prod, CI, release workflow và deploy scripts. | Cần staging server thực, IaC, environment promotion, SBOM/container scan, rollback release playbook, secrets rotation và artifact provenance. | High |
@@ -37,6 +38,26 @@ Smart ERP Next đã có nền tảng mạnh cho một ERP SME: monorepo rõ ràn
 
 ## Gap backlog đề xuất cho chủ repo
 
+| ID | Gap | Why it matters | Foundation fixed in this PR | Remaining implementation | Owner role |
+|---|---|---|---|---|---|
+| GAP-ROLE-01 | Product requirements chưa truy vết tới tests | Giảm rủi ro build sai nghiệp vụ ERP. | `docs/product/prd-template.md` | Áp dụng template cho từng module và link test thật. | PM + BA + QA |
+| GAP-ROLE-02 | Thiếu ADR cho quyết định kiến trúc lớn | Giúp team mới hiểu trade-off và tránh refactor cảm tính. | `docs/adr/0001-record-architecture-decisions.md` | Viết ADR riêng cho API versioning, multi-tenant isolation, offline sync. | Architect |
+| GAP-ROLE-03 | API versioning/error catalog chưa chuẩn hóa | Bảo vệ backward compatibility cho web/mobile/integration partners. | `docs/api-versioning.md`, `docs/api-errors.md` | Thêm contract tests và enforce error catalog trong API code. | Backend |
+| GAP-ROLE-04 | Observability production chưa đủ | Không thể vận hành ERP nếu không có logs/metrics/traces/alerts. | `docs/operations/observability-plan.md` | Triển khai metrics/tracing/dashboard/alerts. | SRE/DevOps |
+| GAP-ROLE-05 | Security program chưa có checklist liên tục | ERP chứa dữ liệu tài chính/khách hàng nhạy cảm. | `docs/security/security-baseline.md` | Thêm secret/dependency/container scanning vào CI. | Security |
+| GAP-ROLE-06 | PWA/offline production gap | SME cần bán hàng/kho hoạt động khi mạng yếu. | Manifest + production service worker registration + app shell caching. | Harden offline UX states, background sync behavior, and conflict tests. | Frontend/PWA |
+| GAP-ROLE-07 | QA traceability và flakiness chưa được quản trị | Số lượng test cao nhưng cần biết test nào bảo vệ rủi ro nào. | `docs/qa/test-traceability-matrix.md` | Cập nhật matrix bằng test IDs thật và CI artifacts. | QA/SDET |
+| GAP-ROLE-08 | Release/rollback chưa có playbook đầy đủ | Giảm downtime và rollback panic khi production lỗi. | `docs/operations/release-rollback-playbook.md` | Kết nối playbook vào release workflow và staging gate. | Release Manager |
+| GAP-ROLE-09 | Data governance/forecast monitoring thiếu | AI/forecast cần đo accuracy và bảo vệ PII. | Security baseline + PRD metrics establish governance hooks. | Thêm data contract template, PII classification, forecast evaluation job. | Data/AI |
+| GAP-ROLE-10 | Support/incident docs thiếu | Chủ repo/team support cần triage nhanh khi user báo lỗi. | `docs/operations/incident-runbook.md` | Tạo support triage SOP và troubleshooting matrix theo module. | Support + SRE |
+
+## Recommended next PR sequence
+
+1. **PR 1 — Apply traceability to one core module**: dùng PRD template và QA matrix cho Sales/POS hoặc Inventory.
+2. **PR 2 — Enforce API governance**: thêm contract tests, error-code assertions và deprecation headers nếu cần.
+3. **PR 3 — Implement production observability**: metrics endpoint/exporter, dashboards, alert rules và runbook links.
+4. **PR 4 — Automate security baseline**: secret scanning, dependency/container scan, SBOM và permission matrix tests trong CI.
+5. **PR 5 — PWA/offline hardening**: offline UX states, install prompt, background sync behavior và conflict-resolution test matrix.
 | ID | Gap | Why it matters | Suggested PR scope | Owner role |
 |---|---|---|---|---|
 | GAP-ROLE-01 | Product requirements chưa truy vết tới tests | Giảm rủi ro build sai nghiệp vụ ERP. | Thêm `docs/product/` với PRD template, persona, acceptance criteria và link tới E2E tương ứng. | PM + BA + QA |
